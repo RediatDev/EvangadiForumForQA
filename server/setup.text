@@ -1,0 +1,9 @@
+steps we took 
+1.initialize backend under the folder name server
+2. initialize npm 
+3. install packages (which you will find in package.json)
+4. install sequlize and sequlize cli 
+5. install sequlize required packages (fs and path)
+6. execute sequlize (npx sequlize -cli init)
+7. hanged the sequlize.confg file in config folder to js so that we can use the env declared variables 
+8. 
