@@ -31,9 +31,9 @@ module.exports = (sequelize, DataTypes) => {
             msg: 'Please provide a valid email',
           },
           async isUnique(value) {
-            // Use a promise to check for existing emails
+            // Only check for uniqueness if the user is being created
             const user = await User.findOne({ where: { email: value } });
-            if (user) {
+            if (user && user.userId !== this.userId) { // Ensure the existing user is not the same as the one being updated
               throw new Error('Email already exists');
             }
           },
@@ -56,7 +56,13 @@ module.exports = (sequelize, DataTypes) => {
       agreed_to_terms: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
+        validate: {
+          isTrue(value) {
+            if (!value) {
+              throw new Error('You must agree to the terms and conditions');
+            }
+          }
+        }
       },
       role: {
         type: DataTypes.STRING(1),

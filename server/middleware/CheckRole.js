@@ -1,8 +1,8 @@
 // roleMiddleware.js
 const checkRole = (roles) => {
     return (req, res, next) => {
-        console.log(req.user)
-        if (!roles.includes(req.user.role)) {
+        // console.log(req.user.userRole)
+        if (!roles.includes(req.user.userRole)) {
             return res.status(403).json({ message: 'Access denied. Insufficient permissions.' });
         }
         next();
