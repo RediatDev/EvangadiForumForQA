@@ -85,7 +85,7 @@ const createUser = async (req, res) => {
     // Generate JWT token
     const token = jwt.sign(
       {
-        userId: user.userid,
+        userId: user.userId,
         userName: user.username,
         userRole: user.role,
       },
@@ -144,7 +144,7 @@ const userLogIn = async (req, res) => {
       // Generate JWT token
       const token = jwt.sign(
         {
-          userId: user.userid,
+          userId: user.userId,
           userName: user.username,
           userRole: user.role,
         },
