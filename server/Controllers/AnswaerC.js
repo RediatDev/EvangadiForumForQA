@@ -1,19 +1,38 @@
 const { Answer } = require('../models'); 
 
 // Create a new answer
-let createAnswer = async (req, res) => {
+const createAnswer = async (req, res) => {
+  const { userId } = req.user;
+  const { questionId } = req.params;
+
   try {
-    const { userId, questionId, answer, url } = req.body;
+    const { answer, url } = req.body;
+
+    // Validate that the answer is not empty
+    if (!answer || answer.trim() === "") {
+      return res.status(400).json({ errors: ["Answer cannot be empty."] });
+    }
+
+    // Check if the URL is provided and validate its format
+    if (url && !url.startsWith("https://www.")) {
+      return res.status(400).json({ errors: ["Invalid URL format. URL must start with 'https://www.'"] });
+    }
+
+    // Create the answer
     const newAnswer = await Answer.create({
-        userId,
-        questionId,
-        answer,
-        url: url || null,
+      userId,
+      questionId,
+      answer,
+      url: url || null,
     });
-    return res.status(201).json(newAnswer);
-  } catch (error) {
-    console.error("Error creating answer:", error);
-    return res.status(500).json({ message: "Error creating answer", error });
+
+    return res.status(201).json({ message: "Answer created successfully" });
+  } catch (err) {
+    if (err.name === "ValidationErrorItem") {
+      const validationErrors = err.errors.map(e => e.message);
+      return res.status(400).json({ errors: [validationErrors.message] });
+  }
+  return res.status(500).json({ errors: [err.message] });
   }
 };
 
@@ -26,47 +45,59 @@ let getAnswerByQuestionId = async (req, res) => {
     });
     return res.status(200).json(answers);
   } catch (error) {
-    console.error("Error fetching answers by question ID:", error);
-    return res.status(500).json({ message: "Error fetching answers", error });
+    if (err.name === "ValidationErrorItem") {
+      const validationErrors = err.errors.map(e => e.message);
+      return res.status(400).json({ errors: [validationErrors.message] });
+  }
+  return res.status(500).json({ errors: [err.message] });
   }
 };
 
 // Update an answer
-let updateAnswer = async (req, res) => {
-    try {
-      const { answerId } = req.params; // Ensure the parameter matches your route
-      const { answer, url } = req.body;
-  
-      // Create an object to hold the fields to update
-      const updateData = {};
-  
-      // Add fields to updateData if they are provided
-      if (answer !== undefined) { // Check if provided (including empty string)
-        updateData.answer = answer;
-      }
-      if (url !== undefined) { // Check if provided (including empty string)
-        updateData.url = url;
-      }
-  
-      // If no fields to update, return a bad request response
-      if (Object.keys(updateData).length === 0) {
-        return res.status(400).json({ message: "No fields to update" });
-      }
-  
-      const [updated] = await Answer.update(updateData, { where: { answerId } });
-  
-      if (updated) {
-        const updatedAnswer = await Answer.findOne({ where: { answerId } });
-        return res.status(200).json(updatedAnswer);
-      }
-  
-      return res.status(404).json({ message: "Answer not found" });
-    } catch (error) {
-      console.error("Error updating answer:", error);
-      return res.status(500).json({ message: "Error updating answer", error });
+const updateAnswer = async (req, res) => {
+  try {
+    const { answerId } = req.params; 
+    const { answer, url } = req.body;
+
+    // Create an object to hold the fields to update
+    const updateData = {};
+
+    // Add fields to updateData if they are provided and not empty
+    if (answer !== undefined && answer.trim() !== "") { // Check if provided and not empty
+      updateData.answer = answer;
     }
-  };
-  
+    if (url !== undefined && url.trim() !== "") { // Check if provided and not empty
+      updateData.url = url;
+    }
+
+    // If no fields to update, return a bad request response
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({ message: "At least one field should be passed for updating." });
+    }
+
+    // Validate URL format if provided
+    if (url && !url.startsWith("https://www.")) {
+      return res.status(400).json({ errors: ["Invalid URL format. URL must start with 'https://www.'"] });
+    }
+
+    const [updated] = await Answer.update(updateData, { where: { answerId } });
+
+    if (updated) {
+      const updatedAnswer = await Answer.findOne({ where: { answerId } });
+      return res.status(200).json(updatedAnswer);
+    }
+
+    return res.status(404).json({ message: "Answer not found" });
+  } catch (error) {
+    console.error("Error updating answer:", error);
+    if (error.name === "ValidationErrorItem") {
+      const validationErrors = error.errors.map(e => e.message);
+      return res.status(400).json({ errors: validationErrors });
+    }
+    return res.status(500).json({ errors: [error.message] });
+  }
+};
+
 
 // Delete an answer
 let deleteAnswer = async (req, res) => {
@@ -82,8 +113,11 @@ let deleteAnswer = async (req, res) => {
   
       return res.status(404).json({ message: "Answer not found" });
     } catch (error) {
-      console.error("Error deleting answer:", error);
-      return res.status(500).json({ message: "Error deleting answer", error });
+      if (error.name === "ValidationErrorItem") {
+        const validationErrors = error.errors.map(e => e.message);
+        return res.status(400).json({ errors: validationErrors });
+      }
+      return res.status(500).json({ errors: [error.message] });
     }
   };
   
@@ -97,8 +131,11 @@ let getAnswerByUserId = async (req, res) => {
     });
     return res.status(200).json(answers);
   } catch (error) {
-    console.error("Error fetching answers by user ID:", error);
-    return res.status(500).json({ message: "Error fetching answers", error });
+    if (error.name === "ValidationErrorItem") {
+      const validationErrors = error.errors.map(e => e.message);
+      return res.status(400).json({ errors: validationErrors });
+    }
+    return res.status(500).json({ errors: [error.message] });
   }
 };
 

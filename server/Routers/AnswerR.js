@@ -5,11 +5,11 @@ const {checkRole} = require('../middleware/CheckRole.js')
 
 let answerCreateRouter = express.Router();
 
-answerCreateRouter.post('/createAnswer',authenticateToken, createAnswer);
-answerCreateRouter.get('/:questionId',authenticateToken,getAnswerByQuestionId);
+answerCreateRouter.post('/createAnswer/:questionId',authenticateToken, createAnswer);
+answerCreateRouter.get('/getAnswer/:questionId',authenticateToken,getAnswerByQuestionId);
 answerCreateRouter.patch('/updateAnswer/:answerId',authenticateToken, updateAnswer);
 answerCreateRouter.delete('/deleteAnswer/:answerId',authenticateToken, deleteAnswer);
-answerCreateRouter.get('/:answerId/:userId',authenticateToken, getAnswerByUserId);
+answerCreateRouter.get('/answerByUser/:answerId/:userId',authenticateToken, getAnswerByUserId);
 
 
 module.exports = {answerCreateRouter};

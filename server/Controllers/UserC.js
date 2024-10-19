@@ -168,7 +168,7 @@ const userLogIn = async (req, res) => {
     }
   };
   
-  const userProfileUpdate = async (req, res) => {
+const userProfileUpdate = async (req, res) => {
     const { userId } = req.params; 
     const { username, firstname, lastname, email, gender, country } = req.body;
   
@@ -264,7 +264,7 @@ const userLogIn = async (req, res) => {
     }
   };
 
-  const userRoleUpdater = async (req, res) => {
+const userRoleUpdater = async (req, res) => {
     const { userId } = req.params;
     const { role } = req.body;
 
@@ -353,7 +353,6 @@ const userProfileDelete = async (req, res) => {
       return res.status(500).json({ errors: [err.message] });
   }
 };
-
 
 const singleUserFinder = async (req, res) => {
     const { userId } = req.params;

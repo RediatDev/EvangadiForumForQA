@@ -56,9 +56,6 @@ let createQuestion = async (req, res) => {
     }
 };
 
-
-
-
 let updateQuestion = async (req, res) => {
     const { questionId } = req.params; 
     const { title, description, tag } = req.body;
@@ -136,9 +133,6 @@ let updateQuestion = async (req, res) => {
     
 };
 
-
-
-
 let deleteQuestion = async (req, res) => {
     const { questionId } = req.params; 
     const userId = req.user.userId;
@@ -183,7 +177,6 @@ let deleteQuestion = async (req, res) => {
         return res.status(500).json({ errors: [err.message] });
     }
 };
-
 
 let getSingleQuestion = async (req, res) => {
     const { questionId } = req.params; 
