@@ -7,7 +7,7 @@ let answerCreateRouter = express.Router();
 
 answerCreateRouter.post('/createAnswer/:questionId',authenticateToken, createAnswer);
 answerCreateRouter.get('/getAnswer/:questionId',authenticateToken,getAnswerByQuestionId);
-answerCreateRouter.patch('/updateAnswer/:answerId',authenticateToken, updateAnswer);
+answerCreateRouter.patch('/updateAnswer/:answerId/:questionId',authenticateToken, updateAnswer);
 answerCreateRouter.delete('/deleteAnswer/:answerId',authenticateToken, deleteAnswer);
 answerCreateRouter.get('/answerByUser/:answerId/:userId',authenticateToken, getAnswerByUserId);
 

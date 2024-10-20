@@ -56,8 +56,9 @@ let getAnswerByQuestionId = async (req, res) => {
 // Update an answer
 const updateAnswer = async (req, res) => {
   try {
-    const { answerId } = req.params; 
+    const { answerId,questionId } = req.params; 
     const { answer, url } = req.body;
+    const {userId}=req.user
 
     // Create an object to hold the fields to update
     const updateData = {};
@@ -80,9 +81,9 @@ const updateAnswer = async (req, res) => {
       return res.status(400).json({ errors: ["Invalid URL format. URL must start with 'https://www.'"] });
     }
 
-    const [updated] = await Answer.update(updateData, { where: { answerId } });
+    const [updated] = await Answer.update(updateData, { where: { answerId,questionId,userId } });
 
-    if (updated) {
+    if (updated) { 
       const updatedAnswer = await Answer.findOne({ where: { answerId } });
       return res.status(200).json(updatedAnswer);
     }
@@ -97,7 +98,6 @@ const updateAnswer = async (req, res) => {
     return res.status(500).json({ errors: [error.message] });
   }
 };
-
 
 // Delete an answer
 let deleteAnswer = async (req, res) => {
@@ -138,6 +138,8 @@ let getAnswerByUserId = async (req, res) => {
     return res.status(500).json({ errors: [error.message] });
   }
 };
+
+
 
 module.exports = {
   createAnswer,

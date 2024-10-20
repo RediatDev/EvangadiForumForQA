@@ -169,8 +169,8 @@ const userLogIn = async (req, res) => {
   };
   
 const userProfileUpdate = async (req, res) => {
-    const { userId } = req.params; 
-    const { username, firstname, lastname, email, gender, country } = req.body;
+    const { userId } = req.user; 
+    const { username, firstname, lastname, gender, country } = req.body;
   
     const errors = [];
   
@@ -179,13 +179,12 @@ const userProfileUpdate = async (req, res) => {
       const trimmedUsername = username ? username.trim() : undefined;
       const trimmedFirstname = firstname ? firstname.trim() : undefined;
       const trimmedLastname = lastname ? lastname.trim() : undefined;
-      const trimmedEmail = email ? email.trim() : undefined;
       const trimmedGender = gender ? gender.trim() : undefined;
       const trimmedCountry = country ? country.trim() : undefined;
   
 
           // Validation checks for required fields
-    const isAnyFieldProvided = [trimmedUsername, trimmedFirstname, trimmedLastname, trimmedEmail, trimmedGender, trimmedCountry].some(field => field !== undefined);
+    const isAnyFieldProvided = [trimmedUsername, trimmedFirstname, trimmedLastname, trimmedGender, trimmedCountry].some(field => field !== undefined);
     
     if (!isAnyFieldProvided) {
       errors.push("At least one field must be provided for update.");
@@ -205,10 +204,6 @@ const userProfileUpdate = async (req, res) => {
         errors.push("Last name must contain letters only.");
       }
   
-      // Validate email format
-      if (trimmedEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
-        errors.push("Invalid email format.");
-      }
   
       // Check for valid gender (optional: customize as needed)
       if (trimmedGender && !['Male', 'Female'].includes(trimmedGender)) {
@@ -243,7 +238,6 @@ const userProfileUpdate = async (req, res) => {
         username: username ? username.trim() : user.username,
         firstname: firstname ? firstname.trim() : user.firstname,
         lastname: lastname ? lastname.trim() : user.lastname,
-        email: email ? email.trim() : user.email,
         gender: gender ? gender.trim() : user.gender,
         country: country ? country.trim() : user.country,
       });

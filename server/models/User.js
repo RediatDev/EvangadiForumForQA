@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isIn: {
-            args: [['male', 'female']],
+            args: [['Male', 'Female']],
             msg: 'Gender must be either male or female',
           },
         },

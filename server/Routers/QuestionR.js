@@ -8,13 +8,13 @@ let questionCreateRouter = express.Router();
 
 questionCreateRouter.post('/createQuestion',authenticateToken,ImageFileUploader.single('image_file'), createQuestion);
 
-questionCreateRouter.post('/updateQuestion/:questionId',authenticateToken,ImageFileUploader.single('image_file'),updateQuestion);
+questionCreateRouter.patch('/updateQuestion/:questionId',authenticateToken,ImageFileUploader.single('image_file'),updateQuestion);
 
 questionCreateRouter.delete('/deleteQuestion/:questionId',authenticateToken, deleteQuestion);
 questionCreateRouter.get('/getQuestion/:questionId',authenticateToken, getSingleQuestion);
 questionCreateRouter.get('/getQuestionByUser',authenticateToken, getAllQuestionBySingleUser);
 questionCreateRouter.get('/getAllQuestion',authenticateToken, getAllQuestions);
-questionCreateRouter.get('/getQuestionByTag/:tag',authenticateToken, getQuestionByTag);
+questionCreateRouter.get('/getQuestionByTag',authenticateToken, getQuestionByTag);
 questionCreateRouter.get('/getImage/:imageLink',authenticateToken, imageSender);
 questionCreateRouter.get('/getAllTags',authenticateToken, getAllTags);
 

@@ -135,8 +135,7 @@ let updateQuestion = async (req, res) => {
 
 let deleteQuestion = async (req, res) => {
     const { questionId } = req.params; 
-    const userId = req.user.userId;
-
+    const {userId} = req.user;
     // Validation check
     if (!questionId) {
         return res.status(400).json({ errors: ["Question ID is required."] });
@@ -282,8 +281,7 @@ let getAllQuestions = async (req, res) => {
 
 
 let getQuestionByTag = async (req, res) => {
-    const { tag } = req.params; 
-
+    const { tag } = req.body; 
     // Validation check
     if (!tag) {
         return res.status(400).json({ errors: ["Tag is required."] });
