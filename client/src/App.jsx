@@ -1,17 +1,17 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Header from './Components/Header'
-
+import React from "react";
+import Dashboard from "./pages/DashBoard/Dashboard.jsx";
+import Header from "./components/Header/Header.jsx";
+import Footer from "./components/Footer/Footer.jsx";
+// import NotFound from "./components/notFound/NotFound";
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-  <>
-<Header/>
-  </>
-  )
+    <>
+      <Header />
+      <Dashboard />
+      <Footer />
+	  {/* <NotFound/> */}
+    </>
+  );
 }
 
-export default App
+export default App;
